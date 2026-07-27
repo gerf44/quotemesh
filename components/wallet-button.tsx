@@ -1,6 +1,7 @@
 "use client";
 
 import { Cable, LogOut, TriangleAlert } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
 import { ARC } from "@/lib/network";
 
@@ -12,7 +13,30 @@ export function WalletButton() {
   const { address, chainId, isConnected } = useAccount();
   const { connectors, connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
-  const { switchChain, isPending: switching } = useSwitchChain();
+  const { switchChain, switchChainAsync, isPending: switching } = useSwitchChain();
+  const automaticAttempt = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!isConnected) {
+      automaticAttempt.current = null;
+      return;
+    }
+
+    if (chainId === undefined) return;
+    if (chainId === ARC.chainId) {
+      automaticAttempt.current = null;
+      return;
+    }
+
+    const attempt = `${address ?? "connected"}:${chainId}`;
+    if (automaticAttempt.current === attempt) return;
+    automaticAttempt.current = attempt;
+
+    void switchChainAsync({ chainId: ARC.chainId }).catch(() => {
+      // The wallet may require a user decision or reject programmatic switching.
+      // The visible button below remains available as a manual retry.
+    });
+  }, [address, chainId, isConnected, switchChainAsync]);
 
   if (isConnected && chainId !== ARC.chainId) {
     return (

@@ -25,5 +25,10 @@ overrides that preset for new wallet network additions. A wallet that already sa
 endpoint must be updated in its network settings; the transaction UI detects the resulting
 HTTP 403 and shows the current RPC plus a copy action.
 
+On connection, the frontend automatically requests Arc Testnet when the wallet reports a different
+chain ID. The request is attempted once per wrong-network transition to avoid repeated prompts
+after a rejection. The header retains a manual retry button, and transactions remain disabled
+until the wallet reports chain ID `5042002`.
+
 Sources: official Arc contract address, stablecoin-native model, finality, memo, batch, gas, EVM
 differences, connect, wallet, RPC endpoint, and deployment pages listed in the README.

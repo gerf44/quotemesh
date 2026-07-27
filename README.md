@@ -242,6 +242,11 @@ return HTTP 403 before a transaction is signed. Open the wallet's network settin
 and set the default RPC to `https://rpc.blockdaemon.testnet.arc.io`, then retry. The application
 detects this failure and displays the same recovery instruction with a copy action.
 
+After a wallet connects on another chain, QuoteMesh automatically requests a switch to Arc Testnet
+(`5042002`). If Arc Testnet is not yet present, the configured Wagmi connector requests that the
+wallet add it using the current `.arc.io` RPC list. Wallet confirmation is still required, and the
+header keeps a manual switch button if the request is rejected.
+
 Current endpoints: https://docs.arc.io/arc/references/rpc-endpoints
 
 ## Arc Testnet deployment

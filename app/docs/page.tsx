@@ -40,6 +40,10 @@ export default function DocsPage() {
           <code>{ARC.walletRpcUrl}</code>. Existing wallet network records cannot be rewritten by
           this application.
         </p>
+        <p>
+          When a connected wallet is on another chain, QuoteMesh automatically requests a switch
+          to Arc Testnet. Your wallet must still ask you to approve the network change.
+        </p>
         <Link
           href="https://docs.arc.io/arc/references/rpc-endpoints"
           className="button"
