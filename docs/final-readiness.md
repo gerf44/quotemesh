@@ -98,6 +98,8 @@ Multicall3From transaction was broadcast during this review.
 - Next.js production build: passed; all declared routes compiled.
 - Browser QA: desktop and 390×844 mobile checked; 11 routes returned HTTP 200; browser console
   reported 0 errors and 0 warnings.
+- Vercel production build and frontend deployment: completed at
+  `https://quotemesh.vercel.app`.
 - Production dependency audit: 0 vulnerabilities with `npm audit --omit=dev`.
 - Full dependency audit: 9 high-severity findings remain in the dev-only ESLint dependency chain
   through legacy `minimatch`/`brace-expansion`. A tested ESLint 10 upgrade was incompatible with the
@@ -132,8 +134,14 @@ described as an independent audit.
 
 ## 7. Deployment status
 
-Not deployed. No QuoteMesh contract has been broadcast, verified, or configured in the frontend.
-There is no live QuoteMesh market, liquidity, RFQ, quote, settlement, or deployment evidence.
+The frontend is deployed at `https://quotemesh.vercel.app`. No QuoteMesh contract has been
+broadcast, verified, or configured in that frontend, so it intentionally displays the zero-state.
+There is no live QuoteMesh market, liquidity, RFQ, quote, settlement, or contract-deployment
+evidence.
+
+The Vercel project was deployed successfully through the CLI, but its attempted GitHub repository
+connection was rejected by the current Vercel GitHub integration permissions. Future automatic
+deployments from GitHub require that integration to be authorized for `gerf44/quotemesh`.
 
 ## 8. Manual actions still required
 
@@ -144,11 +152,13 @@ There is no live QuoteMesh market, liquidity, RFQ, quote, settlement, or deploym
 4. Simulate the complete deployment and one-time market-link sequence, then deploy explicitly.
 5. Verify all five project contract sources and record real addresses, constructor parameters,
    transaction hashes, deployment block, and explorer links.
-6. Configure the frontend with those verified project records and deploy the frontend separately.
+6. Configure the deployed frontend with those verified project records and redeploy it.
 7. Execute and retain evidence for live public/invite RFQs, competing quotes, cancellation/expiry
    release, both settlement directions, restricted-transfer rollback, Memo, and Multicall3From.
 8. Add a hosted resumable indexer before using lifetime analytics at sustained production volume.
 9. Resolve the dev-only dependency advisory when a compatible lint dependency path is available.
+10. Authorize the Vercel GitHub integration for `gerf44/quotemesh` if automatic deployments are
+    required.
 
 ## Brand review
 

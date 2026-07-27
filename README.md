@@ -11,6 +11,10 @@ quotes backed by reserved provider inventory, select one quote, and settle both 
 Experimental Arc Testnet software. QuoteMesh smart contracts have not undergone a professional
 third-party security audit.
 
+**Frontend:** https://quotemesh.vercel.app  
+The public frontend currently shows the honest zero-state because QuoteMesh project contracts have
+not been deployed or configured.
+
 ## Problem and value
 
 AMMs expose users to pool curves and slippage; bilateral desk workflows often hide pricing and
@@ -205,9 +209,10 @@ balances or settlement outcomes.
 
 ## Arc Testnet deployment
 
-Deployment is prepared but has not been executed. Import an encrypted Foundry keystore, fund it
-from the Circle faucet, then use `scripts/deploy-arc-testnet.ps1`. Follow `docs/deployment.md`.
-Private keys must not be passed on the CLI or committed.
+The frontend is deployed at https://quotemesh.vercel.app. Smart-contract deployment is prepared but
+has not been executed. Import an encrypted Foundry keystore, fund it from the Circle faucet, then
+use `scripts/deploy-arc-testnet.ps1`. Follow `docs/deployment.md`. Private keys must not be passed on
+the CLI or committed.
 
 The dated internal review record and manual launch gates are in
 [`docs/final-readiness.md`](docs/final-readiness.md). It is not a third-party audit or deployment
