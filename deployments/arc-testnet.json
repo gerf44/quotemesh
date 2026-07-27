@@ -133,7 +133,6 @@
     "provider": "Vercel",
     "status": "production-deployed",
     "url": "https://quotemesh.vercel.app",
-    "deploymentUrl": "https://quotemesh-kk192o76e-belokonenkovs1401-9181s-projects.vercel.app",
     "deploymentBlockConfigured": 53965111,
     "projectContractEnvironmentConfigured": true
   },
