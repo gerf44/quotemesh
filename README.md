@@ -247,6 +247,11 @@ After a wallet connects on another chain, QuoteMesh automatically requests a swi
 wallet add it using the current `.arc.io` RPC list. Wallet confirmation is still required, and the
 header keeps a manual switch button if the request is rejected.
 
+When a wallet already reports Arc Testnet, the frontend probes that wallet's own RPC with
+`eth_blockNumber`. On failure it attempts the wallet update/add methods with the current endpoints,
+then probes again. Wallets are allowed to ignore replacement metadata for an existing chain, so a
+persistent repair notice provides the exact manual RPC setting when automatic repair cannot work.
+
 Current endpoints: https://docs.arc.io/arc/references/rpc-endpoints
 
 ## Arc Testnet deployment

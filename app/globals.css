@@ -520,6 +520,45 @@ textarea:focus {
   text-underline-offset: 3px;
 }
 
+.rpc-wallet-alert {
+  background: #fffaf0;
+  border: 1px solid var(--amber);
+  border-radius: 8px;
+  bottom: 1rem;
+  box-shadow: 0 16px 40px rgba(5, 29, 42, 0.18);
+  color: var(--ink);
+  display: grid;
+  gap: 0.7rem;
+  max-width: min(430px, calc(100vw - 2rem));
+  padding: 1rem;
+  position: fixed;
+  right: 1rem;
+  text-transform: none;
+  z-index: 100;
+}
+
+.rpc-wallet-alert p {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.rpc-wallet-alert code {
+  overflow-wrap: anywhere;
+}
+
+.rpc-wallet-alert > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.rpc-wallet-alert button {
+  min-height: 34px;
+  padding: 0.45rem 0.7rem;
+}
+
 footer {
   background: var(--navy);
   color: white;

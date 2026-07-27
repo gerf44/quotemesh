@@ -30,5 +30,12 @@ chain ID. The request is attempted once per wrong-network transition to avoid re
 after a rejection. The header retains a manual retry button, and transactions remain disabled
 until the wallet reports chain ID `5042002`.
 
+When the wallet already reports Arc Testnet, the frontend probes the wallet provider using
+`eth_blockNumber`. A failed probe triggers `wallet_updateEthereumChain` when supported, then the
+standard `wallet_addEthereumChain` fallback, using only current `.arc.io` RPCs. The RPC is probed
+again before the UI reports success. Because EIP-3085 allows wallets to prefer their own stored
+metadata and does not mandate replacement of an existing RPC, failed repair remains a blocking,
+persistent UI state with exact manual instructions.
+
 Sources: official Arc contract address, stablecoin-native model, finality, memo, batch, gas, EVM
 differences, connect, wallet, RPC endpoint, and deployment pages listed in the README.

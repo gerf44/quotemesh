@@ -44,6 +44,11 @@ export default function DocsPage() {
           When a connected wallet is on another chain, QuoteMesh automatically requests a switch
           to Arc Testnet. Your wallet must still ask you to approve the network change.
         </p>
+        <p>
+          QuoteMesh also checks the connected wallet&apos;s own Arc RPC and attempts to repair it
+          using wallet update/add requests. Some wallets do not permit applications to replace an
+          existing network RPC; in that case a persistent manual repair notice is shown.
+        </p>
         <Link
           href="https://docs.arc.io/arc/references/rpc-endpoints"
           className="button"
