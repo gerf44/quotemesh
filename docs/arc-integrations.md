@@ -1,7 +1,10 @@
 # Arc integrations
 
 - Network: Arc Testnet, chain ID `5042002`.
-- RPC: `https://rpc.testnet.arc.io`.
+- Frontend RPC: `https://rpc.blockdaemon.testnet.arc.io`.
+- Wallet RPCs: Blockdaemon, dRPC, then QuickNode, all from the official Arc RPC endpoint list.
+- Official primary RPC: `https://rpc.testnet.arc.io`; it returned HTTP 403 from the deployment
+  environment during the 2026-07-27 readiness check, so it is not in the wallet RPC list.
 - Explorer: `https://testnet.arcscan.app`.
 - USDC ERC-20 interface: `0x3600000000000000000000000000000000000000`, 6 decimals.
 - EURC: `0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a`, 6 decimals.
@@ -17,5 +20,10 @@ receipt. Reverted and confirmation-unavailable states are distinct. Memo and Mul
 preserve the original EOA through Arc's CallFrom behavior; they are never nested. Memo content must
 not include personal, confidential, or compliance-sensitive information.
 
+Some wallet and library presets still contain an older `.network` Arc RPC domain. QuoteMesh
+overrides that preset for new wallet network additions. A wallet that already saved the old
+endpoint must be updated in its network settings; the transaction UI detects the resulting
+HTTP 403 and shows the current RPC plus a copy action.
+
 Sources: official Arc contract address, stablecoin-native model, finality, memo, batch, gas, EVM
-differences, connect, wallet, and deployment pages listed in the README.
+differences, connect, wallet, RPC endpoint, and deployment pages listed in the README.

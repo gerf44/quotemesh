@@ -1,9 +1,38 @@
+import { defineChain } from "viem";
 import { arcTestnet } from "viem/chains";
 
+export const ARC_RPC_URLS = [
+  "https://rpc.blockdaemon.testnet.arc.io",
+  "https://rpc.drpc.testnet.arc.io",
+  "https://rpc.quicknode.testnet.arc.io",
+] as const;
+
+export const ARC_PRIMARY_RPC_URL = "https://rpc.testnet.arc.io";
+
+export const ARC_WALLET_RPC_ERROR =
+  "Your wallet's saved Arc RPC is blocked or outdated.";
+
+export function isArcWalletRpcFailure(value: string) {
+  return (
+    /rpc(?:\.blockdaemon|\.drpc|\.quicknode)?\.testnet\.arc\.network/i.test(value) ||
+    (/HTTP request failed/i.test(value) && /(?:status:?\s*403|access denied)/i.test(value))
+  );
+}
+
+const quoteMeshArcTestnet = defineChain({
+  ...arcTestnet,
+  rpcUrls: {
+    default: {
+      http: [...ARC_RPC_URLS],
+    },
+  },
+});
+
 export const ARC = {
-  chain: arcTestnet,
+  chain: quoteMeshArcTestnet,
   chainId: 5_042_002,
-  rpcUrl: "https://rpc.testnet.arc.io",
+  rpcUrl: ARC_RPC_URLS[0],
+  walletRpcUrl: ARC_RPC_URLS[0],
   explorerUrl: "https://testnet.arcscan.app",
   usdc: "0x3600000000000000000000000000000000000000",
   eurc: "0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a",

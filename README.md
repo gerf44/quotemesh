@@ -234,6 +234,16 @@ The cache is resumable, retries RPC failures, filters exact contract addresses, 
 chain ID, transaction hash, log index, and contract address. It never determines authoritative
 balances or settlement outcomes.
 
+## Wallet RPC troubleshooting
+
+QuoteMesh configures new Arc Testnet wallet connections with the current official `.arc.io` RPC
+endpoints. If a wallet was previously configured with `https://rpc.testnet.arc.network`, it can
+return HTTP 403 before a transaction is signed. Open the wallet's network settings for Arc Testnet
+and set the default RPC to `https://rpc.blockdaemon.testnet.arc.io`, then retry. The application
+detects this failure and displays the same recovery instruction with a copy action.
+
+Current endpoints: https://docs.arc.io/arc/references/rpc-endpoints
+
 ## Arc Testnet deployment
 
 The verified contracts are deployed on Arc Testnet and the frontend is configured at
@@ -273,6 +283,7 @@ metadata pinning, production RPC redundancy, and additional officially supported
 - https://docs.arc.io/arc/concepts/transaction-memos
 - https://docs.arc.io/arc/concepts/batched-transactions
 - https://docs.arc.io/arc/references/contract-addresses
+- https://docs.arc.io/arc/references/rpc-endpoints
 - https://docs.arc.io/arc/references/connect-to-arc
 - https://docs.arc.io/arc/references/gas-and-fees
 - https://docs.arc.io/arc/references/evm-differences

@@ -487,6 +487,39 @@ textarea:focus {
   color: #17663f;
 }
 
+.rpc-recovery {
+  border-top: 1px solid rgba(167, 47, 35, 0.2);
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+}
+
+.rpc-recovery p {
+  line-height: 1.55;
+  margin: 0;
+}
+
+.rpc-recovery code {
+  overflow-wrap: anywhere;
+}
+
+.rpc-recovery-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+
+.rpc-recovery-actions button {
+  min-height: 32px;
+  padding: 0.4rem 0.65rem;
+}
+
+.rpc-recovery-actions a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 footer {
   background: var(--navy);
   color: white;

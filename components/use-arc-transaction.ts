@@ -3,7 +3,11 @@
 import { useCallback, useRef, useState } from "react";
 import type { Abi, Address, Hash } from "viem";
 import { usePublicClient, useWriteContract } from "wagmi";
-import { ARC } from "@/lib/network";
+import {
+  ARC,
+  ARC_WALLET_RPC_ERROR,
+  isArcWalletRpcFailure,
+} from "@/lib/network";
 
 type Request = {
   address: Address;
@@ -21,9 +25,14 @@ export type TxStatus =
   | "unknown"
   | "error";
 
-function message(error: unknown) {
+function message(error: unknown, walletRequest = false) {
   if (!(error instanceof Error)) return "Unknown transaction error";
-  if (/rejected|denied/i.test(error.message)) return "Transaction rejected in wallet.";
+  if (walletRequest && isArcWalletRpcFailure(error.message)) {
+    return ARC_WALLET_RPC_ERROR;
+  }
+  if (/user rejected|request rejected|rejected the request|4001/i.test(error.message)) {
+    return "Transaction rejected in wallet.";
+  }
   if (/insufficient funds/i.test(error.message)) {
     return "Insufficient USDC for gas or transaction value.";
   }
@@ -52,7 +61,7 @@ export function useArcTransaction() {
           chainId: ARC.chainId,
         } as never);
       } catch (caught) {
-        setError(message(caught));
+        setError(message(caught, true));
         setStatus("error");
         inFlight.current = false;
         return null;
