@@ -1,7 +1,7 @@
 # Arc integrations
 
 - Network: Arc Testnet, chain ID `5042002`.
-- RPC: `https://rpc.testnet.arc.network`.
+- RPC: `https://rpc.testnet.arc.io`.
 - Explorer: `https://testnet.arcscan.app`.
 - USDC ERC-20 interface: `0x3600000000000000000000000000000000000000`, 6 decimals.
 - EURC: `0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a`, 6 decimals.

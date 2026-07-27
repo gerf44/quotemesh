@@ -13,8 +13,7 @@ third-party security audit.
 
 **Frontend:** https://quotemesh.vercel.app
 
-The public frontend currently shows the honest zero-state because QuoteMesh project contracts have
-not been deployed or configured.
+The public frontend is configured for the verified Arc Testnet deployment listed below.
 
 ## Problem and value
 
@@ -105,17 +104,44 @@ flowchart LR
 
 ## Project-Deployed Contracts
 
-No QuoteMesh contracts have been deployed yet. After a real broadcast, record only verified
-addresses, deployment transactions, constructor arguments, and ArcScan source links here and in
-`deployments/arc-testnet.json`.
+All addresses below are project contracts on Arc Testnet (`5042002`), deployed in block
+`53965111`. Full constructor parameters and initialization transactions are in
+[`deployments/arc-testnet.json`](deployments/arc-testnet.json).
 
-| Contract | Responsibility | Major user functions |
-| --- | --- | --- |
-| `AssetRegistry` | Supported assets, directional pairs, notional limits | Read-only for users |
-| `ProviderRegistry` | Provider profiles and factual execution totals | Register, update, pause, resume |
-| `LiquidityVault` | Available/reserved balances and atomic asset movement | Deposit, withdraw |
-| `RFQMarket` | RFQ, firm quote, release, fee, and execution state machine | Create/cancel RFQ, submit/replace/cancel/release/accept quote |
-| `SettlementRegistry` | Immutable, paginated settlement receipts | Read receipts |
+| Contract | Address | Responsibility | Deployment / verified source |
+| --- | --- | --- | --- |
+| `AssetRegistry` | `0x32906f2105bC66F9508091c4cAfe4cD0D7F95394` | Supported assets, directional pairs, notional limits | [tx](https://testnet.arcscan.app/tx/0xe1ce6727a91a3af5ecc61df0a89bc67647d86e61f6014d3cc2661d8993a9b462) / [source](https://testnet.arcscan.app/address/0x32906f2105bc66f9508091c4cafe4cd0d7f95394?tab=contract) |
+| `ProviderRegistry` | `0x2Ea027838Acf30B1be649cb0738e982ad5709859` | Provider profiles and factual execution totals | [tx](https://testnet.arcscan.app/tx/0x6225d61fb0de6c3eca7f382bf3a040b7f2facc59dbd0c312ba7df65f5cba8776) / [source](https://testnet.arcscan.app/address/0x2ea027838acf30b1be649cb0738e982ad5709859?tab=contract) |
+| `SettlementRegistry` | `0x14D7Ac9BD50f66D93c21c82BB61F9bE7f72C51be` | Unique immutable settlement receipts | [tx](https://testnet.arcscan.app/tx/0x8a891f041dafa749611f361da11fada9ac15c7f11748c53860a0b7b4b458e71f) / [source](https://testnet.arcscan.app/address/0x14d7ac9bd50f66d93c21c82bb61f9be7f72c51be?tab=contract) |
+| `LiquidityVault` | `0xfeAe059ECd0248C917A80a079F67fDe53B7a3fe5` | Available/reserved balances and atomic asset movement | [tx](https://testnet.arcscan.app/tx/0x28cc25c322a317de49b8d0c5cf2e671f3eb77cd72882a020bc6e4b7dd386591f) / [source](https://testnet.arcscan.app/address/0xfeae059ecd0248c917a80a079f67fde53b7a3fe5?tab=contract) |
+| `RFQMarket` | `0xe9633B9D35a786A5cE2ebCF3e28D5f78dDDbA3c9` | RFQ, firm quote, release, fee, and execution state machine | [tx](https://testnet.arcscan.app/tx/0xf35b087fadf19d21132504f9cfe6c575ed0a6daa66bd9bdcba02e5db91987b36) / [source](https://testnet.arcscan.app/address/0xe9633b9d35a786a5ce2ebcf3e28d5f78dddba3c9?tab=contract) |
+
+Constructor ownership is assigned to
+`0x8600D14106aBeaBd7Ef96e82D03C0a3a73bB0AEB`; RFQMarket uses the four registry/vault addresses
+above, the same address as fee recipient, and a deployed protocol fee of `0` bps.
+
+## Live Arc Testnet lifecycle
+
+A self-controlled lifecycle was completed on Arc Testnet with the same user wallet acting as taker
+and provider. It is integration evidence, not evidence of an independent counterparty,
+institutional liquidity, or market adoption.
+
+- Provider registration:
+  [tx](https://testnet.arcscan.app/tx/0x5d94139f82c19698d1f469b4ba62909083b63158d4712fb29bbb5ed71d74aec3)
+- Deposit of `2.000000 USDC`:
+  [tx](https://testnet.arcscan.app/tx/0x108239d2dd166bb3840921922e1e8d1d7c17c92d0357d4d7837e07ebcc45d387)
+- Public RFQ `#1`, selling `1.000000 EURC` for at least `1.000000 USDC`:
+  [tx](https://testnet.arcscan.app/tx/0x2e0134a5995524bb8810c5b3fb0f8e0b9b7915de2eacb74b437e4aa5d7e46de1)
+- Firm quote `#1`, reserving `1.000000 USDC`:
+  [tx](https://testnet.arcscan.app/tx/0x02130ae173bf60166801040b02d0229ec45cdf4012d0c6793640cb2cfb78e547)
+- Atomic acceptance and settlement:
+  [tx](https://testnet.arcscan.app/tx/0x9c5a20a2395acb1ce6595583ce2184e21794021b689d6a0cad3dbc824015f9a6)
+- Settlement receipt trade ID:
+  `0x008b6e0c0d8c578cfb43300818ca3749ea55faef078025291ea5fd1963fe1fcc`
+
+The post-settlement vault state was independently queried: `1.000000 USDC` and `1.000000 EURC`
+available, zero reserved for both tokens, and actual vault balances exactly equal liabilities.
+Both token solvency checks returned `true`.
 
 ## External Arc and Circle Dependencies
 
@@ -210,10 +236,10 @@ balances or settlement outcomes.
 
 ## Arc Testnet deployment
 
-The frontend is deployed at https://quotemesh.vercel.app. Smart-contract deployment is prepared but
-has not been executed. Import an encrypted Foundry keystore, fund it from the Circle faucet, then
-use `scripts/deploy-arc-testnet.ps1`. Follow `docs/deployment.md`. Private keys must not be passed on
-the CLI or committed.
+The verified contracts are deployed on Arc Testnet and the frontend is configured at
+https://quotemesh.vercel.app. Deployment evidence and reproducible encrypted-keystore operations
+are documented in [`docs/deployment.md`](docs/deployment.md). Private keys must not be passed on the
+CLI or committed.
 
 The dated internal review record and manual launch gates are in
 [`docs/final-readiness.md`](docs/final-readiness.md). It is not a third-party audit or deployment
@@ -226,7 +252,9 @@ evidence.
 - Official USDC/EURC pair only in the public deployment plan.
 - No confidential/private RFQ claim: invite-only authorization remains publicly visible.
 - App Kit and StableFX reference panels remain disabled without documented configuration.
-- No live Arc integration test or contract verification exists until deployment is requested.
+- The deployment and source verification do not constitute a professional security audit.
+- Any documented self-controlled lifecycle uses one wallet as both taker and provider; it is
+  integration evidence, not independent institutional liquidity or market activity.
 - Lifetime analytics read logs directly from the configured RPC and are suitable for the Testnet
   MVP, not a high-volume production indexer.
 

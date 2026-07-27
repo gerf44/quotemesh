@@ -3,7 +3,7 @@ import { arcTestnet } from "viem/chains";
 export const ARC = {
   chain: arcTestnet,
   chainId: 5_042_002,
-  rpcUrl: "https://rpc.testnet.arc.network",
+  rpcUrl: "https://rpc.testnet.arc.io",
   explorerUrl: "https://testnet.arcscan.app",
   usdc: "0x3600000000000000000000000000000000000000",
   eurc: "0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a",

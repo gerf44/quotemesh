@@ -13,7 +13,11 @@ export default async function TradePage() {
       eyebrow="USDC / EURC · Professional RFQ terminal"
       title="Request, compare, execute."
       copy="Create an exact-input RFQ, collect reserved firm quotes, then settle the selected provider atomically on Arc."
-      actions={<StatusPill tone={snapshot.rpcOnline ? "positive" : "warning"}>{snapshot.rpcOnline ? "Arc online" : "Not deployed"}</StatusPill>}
+      actions={
+        <StatusPill tone={snapshot.rpcOnline ? "positive" : "warning"}>
+          {snapshot.rpcOnline ? "Arc online" : "RPC unavailable"}
+        </StatusPill>
+      }
     >
       <section className="terminal-grid">
         <div className="panel">

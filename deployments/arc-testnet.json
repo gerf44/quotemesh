@@ -1,9 +1,77 @@
 {
-  "status": "pending",
+  "status": "deployed-verified",
   "network": "Arc Testnet",
   "chainId": 5042002,
-  "deployedAt": null,
-  "projectContracts": {},
+  "deployedAt": "2026-07-27T18:36:04Z",
+  "deploymentBlock": 53965111,
+  "deployer": "0x8600D14106aBeaBd7Ef96e82D03C0a3a73bB0AEB",
+  "owner": "0x8600D14106aBeaBd7Ef96e82D03C0a3a73bB0AEB",
+  "feeRecipient": "0x8600D14106aBeaBd7Ef96e82D03C0a3a73bB0AEB",
+  "protocolFeeBps": 0,
+  "projectContracts": {
+    "assetRegistry": {
+      "address": "0x32906f2105bC66F9508091c4cAfe4cD0D7F95394",
+      "deploymentTransaction": "0xe1ce6727a91a3af5ecc61df0a89bc67647d86e61f6014d3cc2661d8993a9b462",
+      "constructorArguments": [
+        "0x8600D14106aBeaBd7Ef96e82D03C0a3a73bB0AEB"
+      ],
+      "sourceVerification": "verified",
+      "verifiedSource": "https://testnet.arcscan.app/address/0x32906f2105bc66f9508091c4cafe4cd0d7f95394?tab=contract"
+    },
+    "providerRegistry": {
+      "address": "0x2Ea027838Acf30B1be649cb0738e982ad5709859",
+      "deploymentTransaction": "0x6225d61fb0de6c3eca7f382bf3a040b7f2facc59dbd0c312ba7df65f5cba8776",
+      "constructorArguments": [
+        "0x8600D14106aBeaBd7Ef96e82D03C0a3a73bB0AEB"
+      ],
+      "sourceVerification": "verified",
+      "verifiedSource": "https://testnet.arcscan.app/address/0x2ea027838acf30b1be649cb0738e982ad5709859?tab=contract"
+    },
+    "settlementRegistry": {
+      "address": "0x14D7Ac9BD50f66D93c21c82BB61F9bE7f72C51be",
+      "deploymentTransaction": "0x8a891f041dafa749611f361da11fada9ac15c7f11748c53860a0b7b4b458e71f",
+      "constructorArguments": [
+        "0x8600D14106aBeaBd7Ef96e82D03C0a3a73bB0AEB"
+      ],
+      "sourceVerification": "verified",
+      "verifiedSource": "https://testnet.arcscan.app/address/0x14d7ac9bd50f66d93c21c82bb61f9be7f72c51be?tab=contract"
+    },
+    "liquidityVault": {
+      "address": "0xfeAe059ECd0248C917A80a079F67fDe53B7a3fe5",
+      "deploymentTransaction": "0x28cc25c322a317de49b8d0c5cf2e671f3eb77cd72882a020bc6e4b7dd386591f",
+      "constructorArguments": [
+        "0x8600D14106aBeaBd7Ef96e82D03C0a3a73bB0AEB",
+        "0x32906f2105bC66F9508091c4cAfe4cD0D7F95394"
+      ],
+      "sourceVerification": "verified",
+      "verifiedSource": "https://testnet.arcscan.app/address/0xfeae059ecd0248c917a80a079f67fde53b7a3fe5?tab=contract"
+    },
+    "rfqMarket": {
+      "address": "0xe9633B9D35a786A5cE2ebCF3e28D5f78dDDbA3c9",
+      "deploymentTransaction": "0xf35b087fadf19d21132504f9cfe6c575ed0a6daa66bd9bdcba02e5db91987b36",
+      "constructorArguments": [
+        "0x32906f2105bC66F9508091c4cAfe4cD0D7F95394",
+        "0x2Ea027838Acf30B1be649cb0738e982ad5709859",
+        "0xfeAe059ECd0248C917A80a079F67fDe53B7a3fe5",
+        "0x14D7Ac9BD50f66D93c21c82BB61F9bE7f72C51be",
+        "0x8600D14106aBeaBd7Ef96e82D03C0a3a73bB0AEB",
+        0
+      ],
+      "sourceVerification": "verified",
+      "verifiedSource": "https://testnet.arcscan.app/address/0xe9633b9d35a786a5ce2ebcf3e28d5f78dddba3c9?tab=contract"
+    }
+  },
+  "initializationTransactions": {
+    "providerRegistrySetMarket": "0x63ba92d06a8e6b0346f685a423085cc31323e6e0345577b59d0d97b50a851ed8",
+    "settlementRegistrySetMarket": "0x2aad7d21bfe0b678c11eab0b4f72a4cf8d37d5de968722a08c296c72e1830b4e",
+    "liquidityVaultSetMarket": "0x82ef61b1cc3e37c50caca0be8e3359a7951d7be6914e014fb3e3580c17713ff4",
+    "registerUSDC": "0x8c3e1c94ca71307795b618f4d6b255f6c5b95cf7a3dc871c192f47c407746a2d",
+    "registerEURC": "0x33b4e9400be9cfe0f2cc80206f69d1f38253b6262b2e0e87402d2c1c26a709cc",
+    "enableUSDCtoEURC": "0x28f44fbd5b981d5eff522e89ba5e4880ea52ce97ef66db226e7d73193b0fe39c",
+    "enableEURCtoUSDC": "0x5f7a7fef7bf79839094ec8b850c5afef1ee6a5311af58f642f8cf63193522153",
+    "setUSDCtoEURCLimits": "0x4fe7387f06ce6464c256e17eee00e64b1a2380d0566ebc7a2602185f9e47f100",
+    "setEURCtoUSDCLimits": "0x366ba20f5df0b2349979b50b61e0e78df660f2340bb04a1681d6ef864bf6dcd0"
+  },
   "externalDependencies": {
     "usdc": "0x3600000000000000000000000000000000000000",
     "eurc": "0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a",
@@ -12,5 +80,62 @@
     "permit2": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
     "stableFxEscrow": "0x867650F5eAe8df91445971f14d89fd84F0C9a9f8"
   },
-  "note": "Deployment has not been executed. No project contract addresses or transaction hashes are recorded."
+  "verification": {
+    "receiptCount": 14,
+    "successfulReceipts": 14,
+    "bytecodeChecked": true,
+    "ownerAndLinksChecked": true,
+    "assetsPairsAndDecimalsChecked": true,
+    "sourceVerification": "verified-all-five-via-arcscan-api"
+  },
+  "liveOnchainDemo": {
+    "status": "completed",
+    "relationship": "The same user-controlled wallet acted as both taker and provider; this is integration evidence, not independent market activity.",
+    "rfqId": 1,
+    "quoteId": 1,
+    "tradeId": "0x008b6e0c0d8c578cfb43300818ca3749ea55faef078025291ea5fd1963fe1fcc",
+    "sellToken": "EURC",
+    "buyToken": "USDC",
+    "sellAmount": 1000000,
+    "buyAmount": 1000000,
+    "feeAmount": 0,
+    "transactions": {
+      "registerProvider": "0x5d94139f82c19698d1f469b4ba62909083b63158d4712fb29bbb5ed71d74aec3",
+      "approveUSDC": "0xe1337266d719f1e37522c498de0279df350b295b638ccda0f5f8b9d27c30bc40",
+      "depositUSDC": "0x108239d2dd166bb3840921922e1e8d1d7c17c92d0357d4d7837e07ebcc45d387",
+      "createRFQ": "0x2e0134a5995524bb8810c5b3fb0f8e0b9b7915de2eacb74b437e4aa5d7e46de1",
+      "submitQuote": "0x02130ae173bf60166801040b02d0229ec45cdf4012d0c6793640cb2cfb78e547",
+      "approveEURC": "0xfc9882f017b7f1157bdc0b4a536fd303be933ec65dd3603c52c26db29b4d4879",
+      "acceptQuote": "0x9c5a20a2395acb1ce6595583ce2184e21794021b689d6a0cad3dbc824015f9a6"
+    },
+    "blockRange": {
+      "first": 53967911,
+      "last": 53968005
+    },
+    "postState": {
+      "settlementCount": 1,
+      "providerQuotesSubmitted": 1,
+      "providerTradesCompleted": 1,
+      "providerQuoteMeshVerified": false,
+      "usdcAvailable": 1000000,
+      "usdcReserved": 0,
+      "usdcVaultBalance": 1000000,
+      "usdcVaultLiability": 1000000,
+      "usdcSolvent": true,
+      "eurcAvailable": 1000000,
+      "eurcReserved": 0,
+      "eurcVaultBalance": 1000000,
+      "eurcVaultLiability": 1000000,
+      "eurcSolvent": true
+    }
+  },
+  "frontendDeployment": {
+    "provider": "Vercel",
+    "status": "production-deployed",
+    "url": "https://quotemesh.vercel.app",
+    "deploymentUrl": "https://quotemesh-kk192o76e-belokonenkovs1401-9181s-projects.vercel.app",
+    "deploymentBlockConfigured": 53965111,
+    "projectContractEnvironmentConfigured": true
+  },
+  "note": "Deployment, configuration, and source verification were independently confirmed onchain and through the ArcScan API."
 }

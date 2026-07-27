@@ -33,17 +33,19 @@ certification.
 
 The project maintains five contract sources:
 
-| Contract | Purpose | Deployment status |
-| --- | --- | --- |
-| `AssetRegistry` | Supported assets, directional pairs, and pair limits | Not deployed |
-| `ProviderRegistry` | Provider registration, status, profile hashes, and QuoteMesh-only flags | Not deployed |
-| `LiquidityVault` | Available/reserved balances, settlement transfers, and fee accounting | Not deployed |
-| `RFQMarket` | RFQ, quote, reservation, acceptance, and settlement lifecycle | Not deployed |
-| `SettlementRegistry` | Unique immutable settlement receipts and bounded pagination | Not deployed |
+| Contract | Purpose | Arc Testnet address | Source status |
+| --- | --- | --- | --- |
+| `AssetRegistry` | Supported assets, directional pairs, and pair limits | `0x32906f2105bC66F9508091c4cAfe4cD0D7F95394` | ArcScan verified |
+| `ProviderRegistry` | Provider registration, status, profile hashes, and QuoteMesh-only flags | `0x2Ea027838Acf30B1be649cb0738e982ad5709859` | ArcScan verified |
+| `LiquidityVault` | Available/reserved balances, settlement transfers, and fee accounting | `0xfeAe059ECd0248C917A80a079F67fDe53B7a3fe5` | ArcScan verified |
+| `RFQMarket` | RFQ, quote, reservation, acceptance, and settlement lifecycle | `0xe9633B9D35a786A5cE2ebCF3e28D5f78dDDbA3c9` | ArcScan verified |
+| `SettlementRegistry` | Unique immutable settlement receipts and bounded pagination | `0x14D7Ac9BD50f66D93c21c82BB61F9bE7f72C51be` | ArcScan verified |
 
-No project address, deployment transaction, source-verification link, or constructor record exists.
-`deployments/arc-testnet.json` intentionally records `status: pending` and an empty
-`projectContracts` object.
+All five contracts were deployed in Arc Testnet block `53965111`. All 14 deployment and
+initialization receipts succeeded. Bytecode, owners, one-time market links, both directional
+pairs, pair limits, fee recipient, and the zero-bps protocol fee were independently queried.
+Constructor parameters, transaction hashes, and verified source links are recorded in
+`deployments/arc-testnet.json` and `docs/deployment.md`.
 
 ## 2. External Arc and Circle Dependencies
 
@@ -76,13 +78,32 @@ QuoteMesh. StableFX is not integrated into the application.
 - Direct-EOA guardrail copy for Memo and Multicall3From; Memo is not nested in Multicall3From.
 - Receipt-status-aware `Pending`, `Final`, `Reverted`, and `Confirmation unavailable` states.
 
-The builders compiled and were reviewed locally. They have not been exercised in a live Arc
-transaction. Circle App Kit and StableFX pricing are not integrated.
+The direct EOA RFQ lifecycle was exercised in live Arc transactions. The optional Memo and
+Multicall3From acceptance builders compiled and were reviewed locally but have not been used in a
+live transaction. Circle App Kit and StableFX pricing are not integrated.
 
 ## 4. Live onchain demo transactions
 
-None. No wallet write, deployment, RFQ, quote, settlement, Memo transaction, or
-Multicall3From transaction was broadcast during this review.
+One self-controlled lifecycle was completed with the same wallet as taker and provider. This
+tests integration behavior but is not independent counterparty activity or proof of market
+liquidity.
+
+| Action | Transaction |
+| --- | --- |
+| Register provider | `0x5d94139f82c19698d1f469b4ba62909083b63158d4712fb29bbb5ed71d74aec3` |
+| Approve and deposit 2 USDC | `0xe1337266d719f1e37522c498de0279df350b295b638ccda0f5f8b9d27c30bc40`, `0x108239d2dd166bb3840921922e1e8d1d7c17c92d0357d4d7837e07ebcc45d387` |
+| Create EURC-to-USDC RFQ #1 | `0x2e0134a5995524bb8810c5b3fb0f8e0b9b7915de2eacb74b437e4aa5d7e46de1` |
+| Submit firm quote #1 | `0x02130ae173bf60166801040b02d0229ec45cdf4012d0c6793640cb2cfb78e547` |
+| Approve 1 EURC and accept quote | `0xfc9882f017b7f1157bdc0b4a536fd303be933ec65dd3603c52c26db29b4d4879`, `0x9c5a20a2395acb1ce6595583ce2184e21794021b689d6a0cad3dbc824015f9a6` |
+
+All seven receipts succeeded. Settlement count is `1`; trade ID is
+`0x008b6e0c0d8c578cfb43300818ca3749ea55faef078025291ea5fd1963fe1fcc`.
+RFQ status is Filled, quote status is Filled, active reservation is zero, and the receipt records
+exactly 1 EURC sold for 1 USDC with a zero fee. Post-settlement USDC and EURC vault balances each
+equal their 1-token liabilities, and both solvency checks returned true.
+
+No live Memo, Multicall3From, invite-only, competing-quote, cancellation/expiry release, or
+restricted-transfer transaction has been broadcast.
 
 ## 5. Test and build results
 
@@ -96,6 +117,8 @@ Multicall3From transaction was broadcast during this review.
 - ESLint: passed with zero warnings.
 - TypeScript `tsc --noEmit`: passed.
 - Next.js production build: passed; all declared routes compiled.
+- The full 37-test Foundry suite and the complete lint/typecheck/production-build pipeline were run
+  again after deployment preparation and passed.
 - Browser QA: desktop and 390×844 mobile checked; 11 routes returned HTTP 200; browser console
   reported 0 errors and 0 warnings.
 - Vercel production build and frontend deployment: completed at
@@ -134,10 +157,10 @@ described as an independent audit.
 
 ## 7. Deployment status
 
-The frontend is deployed at `https://quotemesh.vercel.app`. No QuoteMesh contract has been
-broadcast, verified, or configured in that frontend, so it intentionally displays the zero-state.
-There is no live QuoteMesh market, liquidity, RFQ, quote, settlement, or contract-deployment
-evidence.
+The frontend was production-redeployed and aliased at `https://quotemesh.vercel.app`. The Vercel
+build passed with the five verified contract addresses and deployment block configured as
+production environment variables. The five project contracts are deployed and source-verified on
+Arc Testnet.
 
 The Vercel project was deployed successfully through the CLI, but its attempted GitHub repository
 connection was rejected by the current Vercel GitHub integration permissions. Future automatic
@@ -146,19 +169,15 @@ deployments from GitHub require that integration to be authorized for `gerf44/qu
 ## 8. Manual actions still required
 
 1. Obtain an independent smart-contract and frontend security review.
-2. Reconfirm every Arc network value and external address immediately before deployment.
-3. Use an encrypted keystore or hardware-backed signer; never place a raw private key in the
-   repository or command history.
-4. Simulate the complete deployment and one-time market-link sequence, then deploy explicitly.
-5. Verify all five project contract sources and record real addresses, constructor parameters,
-   transaction hashes, deployment block, and explorer links.
-6. Configure the deployed frontend with those verified project records and redeploy it.
-7. Execute and retain evidence for live public/invite RFQs, competing quotes, cancellation/expiry
-   release, both settlement directions, restricted-transfer rollback, Memo, and Multicall3From.
-8. Add a hosted resumable indexer before using lifetime analytics at sustained production volume.
-9. Resolve the dev-only dependency advisory when a compatible lint dependency path is available.
-10. Authorize the Vercel GitHub integration for `gerf44/quotemesh` if automatic deployments are
-    required.
+2. Use separate taker/provider wallets for independent live public and invite-only RFQs,
+   competing quotes, cancellation/expiry release, and both settlement directions.
+3. Execute and retain live evidence for restricted-transfer rollback, Memo, and Multicall3From.
+4. Add a hosted resumable indexer before using lifetime analytics at sustained production volume.
+5. Resolve the dev-only dependency advisory when a compatible lint dependency path is available.
+6. Authorize the Vercel GitHub integration for `gerf44/quotemesh` if automatic deployments are
+   required.
+7. Replace the single EOA owner with an operationally appropriate multisig or governance process
+   before any real-value use.
 
 ## Brand review
 
