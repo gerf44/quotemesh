@@ -11,7 +11,8 @@ quotes backed by reserved provider inventory, select one quote, and settle both 
 Experimental Arc Testnet software. QuoteMesh smart contracts have not undergone a professional
 third-party security audit.
 
-**Frontend:** https://quotemesh.vercel.app  
+**Frontend:** https://quotemesh.vercel.app
+
 The public frontend currently shows the honest zero-state because QuoteMesh project contracts have
 not been deployed or configured.
 
