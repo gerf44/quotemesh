@@ -1,0 +1,6 @@
+{
+  "schema": "quotemesh/rfq/v1",
+  "clientReference": "EXAMPLE-ONLY",
+  "purpose": "Treasury conversion",
+  "note": "Sample metadata only. Not live onchain data."
+}

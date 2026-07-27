@@ -1,0 +1,10 @@
+{
+  "schema": "quotemesh/provider/v1",
+  "displayName": "Northstar Liquidity",
+  "description": "Example public provider metadata. Not a live or verified provider.",
+  "supportedPairs": ["USDC/EURC", "EURC/USDC"],
+  "website": "https://example.invalid",
+  "contact": "treasury@example.invalid",
+  "jurisdiction": "Provider-supplied field",
+  "complianceStatement": "Provider-supplied statement; not QuoteMesh verification."
+}

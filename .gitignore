@@ -1,0 +1,15 @@
+node_modules/
+.tools/
+.playwright-cli/
+.next/
+out/
+output/
+cache/
+broadcast/
+.env
+.env.*
+!.env.example
+indexer/data/
+*.log
+*.tsbuildinfo
+.vercel/

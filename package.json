@@ -1,0 +1,51 @@
+{
+  "name": "quotemesh",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Independent multi-provider stablecoin RFQ marketplace built on Arc Network.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "index": "tsx indexer/index.ts",
+    "index:reset": "tsx indexer/index.ts --reset",
+    "forge": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/forge.ps1",
+    "forge:fmt": "npm run forge -- fmt --check",
+    "forge:build": "npm run forge -- build",
+    "forge:test": "npm run forge -- test -vvv",
+    "forge:gas": "npm run forge -- test --gas-report",
+    "check": "npm run lint && npm run typecheck && npm run build"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.6.1",
+    "@tanstack/react-query": "5.101.4",
+    "lucide-react": "0.468.0",
+    "next": "16.2.12",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "recharts": "3.3.0",
+    "viem": "2.55.8",
+    "wagmi": "3.7.4",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.18",
+    "@types/node": "20.19.33",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "16.2.12",
+    "tailwindcss": "4.1.18",
+    "tsx": "4.23.1",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "postcss": "8.5.23",
+    "sharp": "0.35.3"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}
