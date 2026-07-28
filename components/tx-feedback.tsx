@@ -11,6 +11,7 @@ import {
 
 const labels: Record<TxStatus, string> = {
   idle: "Ready",
+  checking: "Checking transaction",
   wallet: "Waiting for wallet confirmation",
   pending: "Pending on Arc",
   final: "Transaction final on Arc",

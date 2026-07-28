@@ -292,6 +292,49 @@ button:disabled {
   padding: 1.1rem;
 }
 
+.balance-hint {
+  color: var(--ink-soft);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.balance-hint.error-copy {
+  color: var(--red);
+}
+
+.provider-inventory {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: 1fr 1fr;
+  padding: 1rem;
+}
+
+.inventory-status {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: space-between;
+  padding: 0 0 0.8rem;
+}
+
+.inventory-status span,
+.inventory-asset span {
+  color: var(--ink-soft);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+}
+
+.inventory-asset {
+  background: #f0f2ed;
+  border-radius: 6px;
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.8rem;
+}
+
 .form-row {
   display: grid;
   gap: 0.55rem;
@@ -650,6 +693,7 @@ footer p {
   .terminal-grid,
   .section-grid,
   .metrics-grid,
+  .provider-inventory,
   .steps,
   footer {
     grid-template-columns: 1fr;

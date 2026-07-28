@@ -168,6 +168,11 @@ actual vault balance >= total available liability + total reserved liability
 
 Unexpected direct transfers create untouched surplus. The MVP has no administrator sweep.
 
+The provider console reads the connected wallet's selected-token balance and vault allowance before
+a deposit. It skips redundant approvals, blocks amounts above the wallet balance, and simulates
+every contract write before requesting a wallet signature. The inventory panel reads the connected
+provider's available and reserved USDC/EURC balances directly from the deployed vault.
+
 ## Atomic settlement
 
 Acceptance validates RFQ/quote ownership, status, expiries, minimum output, and fee bounds before

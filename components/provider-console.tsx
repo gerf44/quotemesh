@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { keccak256, parseUnits, stringToHex } from "viem";
-import { useAccount } from "wagmi";
+import { formatUnits, keccak256, parseUnits, stringToHex, zeroAddress } from "viem";
+import { useAccount, useReadContract } from "wagmi";
 import { erc20Abi, liquidityVaultAbi, providerRegistryAbi, rfqMarketAbi } from "@/lib/abis";
 import { getDeployment } from "@/lib/deployment";
 import { isPositiveInteger, isPositiveTokenAmount } from "@/lib/input";
@@ -23,6 +23,43 @@ export function ProviderConsole() {
   const [metadata, setMetadata] = useState("ipfs://");
   const tx = useArcTransaction();
   const onArc = chainId === ARC.chainId;
+  const selectedToken = TOKENS[token];
+  const depositAmount =
+    action === "deposit" && isPositiveTokenAmount(amount) ? parseUnits(amount, 6) : null;
+  const balanceRead = useReadContract({
+    address: selectedToken.address,
+    abi: erc20Abi,
+    functionName: "balanceOf",
+    args: [address ?? zeroAddress],
+    chainId: ARC.chainId,
+    query: {
+      enabled: action === "deposit" && Boolean(address) && onArc,
+      refetchInterval: 10_000,
+    },
+  });
+  const allowanceRead = useReadContract({
+    address: selectedToken.address,
+    abi: erc20Abi,
+    functionName: "allowance",
+    args: [address ?? zeroAddress, deployment?.liquidityVault ?? zeroAddress],
+    chainId: ARC.chainId,
+    query: {
+      enabled: action === "deposit" && Boolean(address && deployment) && onArc,
+      refetchInterval: 10_000,
+    },
+  });
+  const depositReadError = balanceRead.isError || allowanceRead.isError;
+  const depositBalanceReady =
+    action !== "deposit" ||
+    (!balanceRead.isPending &&
+      !allowanceRead.isPending &&
+      !depositReadError &&
+      balanceRead.data !== undefined &&
+      allowanceRead.data !== undefined);
+  const insufficientDepositBalance =
+    depositAmount !== null &&
+    balanceRead.data !== undefined &&
+    balanceRead.data < depositAmount;
   const needsAmount =
     action === "deposit" || action === "withdraw" || action === "quote" || action === "replace";
   const needsId =
@@ -30,6 +67,8 @@ export function ProviderConsole() {
   const actionValid =
     (!needsAmount || isPositiveTokenAmount(amount)) &&
     (!needsId || isPositiveInteger(id)) &&
+    depositBalanceReady &&
+    !insufficientDepositBalance &&
     (action !== "register" || (metadata.length > 0 && metadata.length <= 256));
 
   async function execute() {
@@ -44,19 +83,27 @@ export function ProviderConsole() {
       });
     }
     if (action === "deposit") {
-      const approval = await tx.execute({
-        address: TOKENS[token].address,
-        abi: erc20Abi,
-        functionName: "approve",
-        args: [deployment.liquidityVault, parseUnits(amount, 6)],
-      });
-      if (!approval) return null;
-      return tx.execute({
+      const parsedAmount = parseUnits(amount, 6);
+      if (balanceRead.data === undefined || balanceRead.data < parsedAmount) return null;
+      if (allowanceRead.data === undefined || allowanceRead.data < parsedAmount) {
+        const approval = await tx.execute({
+          address: selectedToken.address,
+          abi: erc20Abi,
+          functionName: "approve",
+          args: [deployment.liquidityVault, parsedAmount],
+        });
+        if (!approval) return null;
+      }
+      const deposit = await tx.execute({
         address: deployment.liquidityVault,
         abi: liquidityVaultAbi,
         functionName: "deposit",
-        args: [TOKENS[token].address, parseUnits(amount, 6)],
+        args: [selectedToken.address, parsedAmount],
       });
+      if (deposit) {
+        await Promise.all([balanceRead.refetch(), allowanceRead.refetch()]);
+      }
+      return deposit;
     }
     if (action === "withdraw") {
       return tx.execute({
@@ -130,6 +177,19 @@ export function ProviderConsole() {
             <label>
               Amount
               <input value={amount} onChange={(event) => setAmount(event.target.value)} />
+              {action === "deposit" && (
+                <span
+                  className={`balance-hint ${insufficientDepositBalance ? "error-copy" : ""}`}
+                >
+                  {balanceRead.isPending
+                    ? "Checking wallet balance…"
+                    : balanceRead.isError
+                      ? "Wallet balance check failed"
+                    : balanceRead.data === undefined
+                      ? "Wallet balance unavailable"
+                      : `Wallet balance: ${formatUnits(balanceRead.data, 6)} ${token}`}
+                </span>
+              )}
             </label>
           )}
           {(action === "quote" || action === "replace") && (
@@ -161,6 +221,12 @@ export function ProviderConsole() {
             ? "Connect provider wallet"
             : !onArc
               ? "Switch to Arc first"
+              : action === "deposit" && depositReadError
+                ? "Deposit checks unavailable"
+                : action === "deposit" && !depositBalanceReady
+                  ? "Checking deposit requirements"
+                  : insufficientDepositBalance
+                    ? `Insufficient ${token} balance`
               : tx.busy
                 ? "Transaction in progress"
                 : "Continue"}

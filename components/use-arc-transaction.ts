@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import type { Abi, Address, Hash } from "viem";
-import { usePublicClient, useWriteContract } from "wagmi";
+import { useAccount, usePublicClient, useWriteContract } from "wagmi";
 import {
   ARC,
   ARC_WALLET_RPC_ERROR,
@@ -18,6 +18,7 @@ type Request = {
 
 export type TxStatus =
   | "idle"
+  | "checking"
   | "wallet"
   | "pending"
   | "final"
@@ -27,19 +28,28 @@ export type TxStatus =
 
 function message(error: unknown, walletRequest = false) {
   if (!(error instanceof Error)) return "Unknown transaction error";
+  const detailed = error as Error & { shortMessage?: string; details?: string };
+  const errorText = detailed.shortMessage || detailed.details || error.message;
   if (walletRequest && isArcWalletRpcFailure(error.message)) {
     return ARC_WALLET_RPC_ERROR;
   }
-  if (/user rejected|request rejected|rejected the request|4001/i.test(error.message)) {
+  if (/user rejected|request rejected|rejected the request|4001/i.test(errorText)) {
     return "Transaction rejected in wallet.";
   }
-  if (/insufficient funds/i.test(error.message)) {
+  if (/transfer amount exceeds balance|insufficient balance/i.test(errorText)) {
+    return "Insufficient token balance for this transaction.";
+  }
+  if (/transfer amount exceeds allowance|insufficient allowance/i.test(errorText)) {
+    return "Token allowance is insufficient for this transaction.";
+  }
+  if (/insufficient funds/i.test(errorText)) {
     return "Insufficient USDC for gas or transaction value.";
   }
-  return error.message.split("\n")[0];
+  return errorText.split("\n")[0];
 }
 
 export function useArcTransaction() {
+  const { address: account } = useAccount();
   const publicClient = usePublicClient({ chainId: ARC.chainId });
   const { writeContractAsync } = useWriteContract();
   const [status, setStatus] = useState<TxStatus>("idle");
@@ -53,8 +63,23 @@ export function useArcTransaction() {
       inFlight.current = true;
       setError(null);
       setHash(null);
-      setStatus("wallet");
+      setStatus("checking");
       let transactionHash: Hash;
+      if (publicClient && account) {
+        try {
+          await publicClient.simulateContract({
+            ...request,
+            account,
+          } as never);
+        } catch (caught) {
+          setError(`Transaction would revert: ${message(caught)}`);
+          setStatus("error");
+          inFlight.current = false;
+          return null;
+        }
+      }
+
+      setStatus("wallet");
       try {
         transactionHash = await writeContractAsync({
           ...request,
@@ -96,7 +121,7 @@ export function useArcTransaction() {
         return null;
       }
     },
-    [publicClient, writeContractAsync],
+    [account, publicClient, writeContractAsync],
   );
 
   const reset = () => {
@@ -111,7 +136,7 @@ export function useArcTransaction() {
     status,
     hash,
     error,
-    busy: status === "wallet" || status === "pending",
+    busy: status === "checking" || status === "wallet" || status === "pending",
     reset,
   };
 }
