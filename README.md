@@ -242,15 +242,18 @@ return HTTP 403 before a transaction is signed. Open the wallet's network settin
 and set the default RPC to `https://rpc.blockdaemon.testnet.arc.io`, then retry. The application
 detects this failure and displays the same recovery instruction with a copy action.
 
-After a wallet connects on another chain, QuoteMesh automatically requests a switch to Arc Testnet
-(`5042002`). If Arc Testnet is not yet present, the configured Wagmi connector requests that the
-wallet add it using the current `.arc.io` RPC list. Wallet confirmation is still required, and the
-header keeps a manual switch button if the request is rejected.
+The connect handshake targets Arc Testnet (`5042002`) directly. If Arc Testnet is not yet present,
+the configured Wagmi connector requests that the wallet add it using the current `.arc.io` RPC
+list, then switch to it. A second wrong-network guard covers restored sessions. Wallet confirmation
+is still required, and the header keeps a manual switch button if the request is rejected.
 
 When a wallet already reports Arc Testnet, the frontend probes that wallet's own RPC with
 `eth_blockNumber`. On failure it attempts the wallet update/add methods with the current endpoints,
 then probes again. Wallets are allowed to ignore replacement metadata for an existing chain, so a
 persistent repair notice provides the exact manual RPC setting when automatic repair cannot work.
+Because the wallet API has no standard method for deleting a saved custom network, the notice
+explains how to delete the broken Arc entry once; the next connect automatically re-adds and
+switches to the correctly configured network.
 
 Current endpoints: https://docs.arc.io/arc/references/rpc-endpoints
 

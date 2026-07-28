@@ -25,17 +25,20 @@ overrides that preset for new wallet network additions. A wallet that already sa
 endpoint must be updated in its network settings; the transaction UI detects the resulting
 HTTP 403 and shows the current RPC plus a copy action.
 
-On connection, the frontend automatically requests Arc Testnet when the wallet reports a different
-chain ID. The request is attempted once per wrong-network transition to avoid repeated prompts
-after a rejection. The header retains a manual retry button, and transactions remain disabled
-until the wallet reports chain ID `5042002`.
+The connector handshake explicitly targets Arc Testnet, so a new connection requests chain ID
+`5042002` immediately and adds the configured chain when it is unknown to the wallet. A restored
+session on another chain has a second automatic guard. The request is attempted once per
+wrong-network transition to avoid repeated prompts after a rejection. The header retains a manual
+retry button, and transactions remain disabled until the wallet reports chain ID `5042002`.
 
 When the wallet already reports Arc Testnet, the frontend probes the wallet provider using
 `eth_blockNumber`. A failed probe triggers `wallet_updateEthereumChain` when supported, then the
 standard `wallet_addEthereumChain` fallback, using only current `.arc.io` RPCs. The RPC is probed
 again before the UI reports success. Because EIP-3085 allows wallets to prefer their own stored
 metadata and does not mandate replacement of an existing RPC, failed repair remains a blocking,
-persistent UI state with exact manual instructions.
+persistent UI state with exact manual instructions. No standard wallet method deletes an existing
+custom network, so the supported recovery is a one-time wallet-side deletion followed by reconnect;
+the connector then automatically adds and switches to Arc with the current RPC metadata.
 
 Sources: official Arc contract address, stablecoin-native model, finality, memo, batch, gas, EVM
 differences, connect, wallet, RPC endpoint, and deployment pages listed in the README.
